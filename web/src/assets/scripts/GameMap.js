@@ -76,8 +76,7 @@ export class GameMap extends GameObject {
 
     start() {
         for (let i = 0; ; i++) {
-            if (this.create_walls()) 
-                break;
+            if (this.create_walls()) break;
         }
 
     }
