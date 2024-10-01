@@ -4,8 +4,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Configuration // 一定不要忽略此注解
+@Configuration
 public class CorsConfig implements WebMvcConfigurer {
+    //解决跨域问题的类
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // 所有接口
