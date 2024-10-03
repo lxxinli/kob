@@ -7,10 +7,58 @@
 import NavBar from './components/NavBar.vue'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap"
+// import $ from 'jquery'
 
 export default {
   components: {
     NavBar
+  },
+
+  setup() {
+    // $.ajax({
+    //   url: "http://127.0.0.1:3000/user/account/token/",
+    //   type: "post",
+    //   data: {
+    //     username: "lx",
+    //     password: "plx"
+    //   },
+    //   success(resp) {
+    //     console.log(resp);
+    //   },
+    //   error(resp) {
+    //     console.log(resp);
+    //   }
+    // })
+
+    // $.ajax({
+    //   url: "http://127.0.0.1:3000/user/account/info/",
+    //   type: "get",
+    //   headers: {
+    //     Authorization: "Bearer " + "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1NDc4ODRiN2FlODI0M…zMyfQ.DdRh_uJOmcbVX8imls185aFEoTfaJzBqLKw3a70vFdU"
+    //   },
+    //   success(resp) {
+    //     console.log(resp);
+    //   },
+    //   error(resp) {
+    //     console.log(resp);
+    //   }
+    // })
+
+    // $.ajax({
+    //   url: "http://127.0.0.1:3000/user/account/register/",
+    //   type: "post",
+    //   data: {
+    //     username: "yhq",
+    //     password: "pyhq",
+    //     confirmedPassword: "pyhq",
+    //   },
+    //   success(resp) {
+    //     console.log(resp);
+    //   },
+    //   error(resp) {
+    //     console.log(resp);
+    //   }
+    // })
   }
 }
 
