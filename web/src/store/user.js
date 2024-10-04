@@ -31,9 +31,10 @@ export default {
                   password: data.password,
                 },
                 success(resp) {
-                  if (resp.response_message === "success")      
+                  if (resp.response_message === "success"){      
                     context.commit("updateToken", resp.token);
-                  else 
+                    data.success(resp);
+                  } else 
                     data.error(resp);
                 },
                 error(resp) {
