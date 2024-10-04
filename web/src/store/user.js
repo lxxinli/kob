@@ -19,6 +19,13 @@ export default {
         },
         updateToken(state, token) {
             state.token = token;
+        },
+        logout(state) {
+          state.id = "";
+          state.username = "";
+          state.photo = "";
+          state.token = "";
+          state.is_login = false;
         }
     },
     actions: {
@@ -41,6 +48,33 @@ export default {
                     data.error(resp);
                 }
               })
+        },
+        getinfo(context, data) {
+          $.ajax({
+              url: "http://127.0.0.1:3000/user/account/info/",
+              type: "get",
+              headers: {
+                Authorization: "Bearer " + context.state.token,
+              },
+              success(resp) {
+                if (resp.response_message === "success") {
+                    context.commit("updateUser", {
+                      ...resp,
+                      is_login: true,
+                    });
+                    data.success(resp);
+                } else {
+                    data.error(resp);
+                }
+              },
+              error(resp) {
+                data.error(resp);
+              }
+            })
+        },
+        logout(context) {
+            context.commit("logout");
+            
         }
     },
     modules: {

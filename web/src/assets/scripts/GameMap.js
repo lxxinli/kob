@@ -1,7 +1,7 @@
 
 import { GameObject } from "./GameObject";
 import { Snake } from "./Snack";
-import { Wall } from "./Wall";
+import { Wall } from "./wall";
 
 export class GameMap extends GameObject {
     constructor(ctx, parent) { 
