@@ -1,5 +1,5 @@
 <template>
-    <ContentField v-if="$store.state.user.is_pullingInfo == false">
+    <ContentField v-if="!$store.state.user.pulling_info">
         <div class="row justify-content-md-center">
             <div class="col-3">
                 <form @submit.prevent="login">
@@ -11,7 +11,7 @@
                         <label for="password" class="form-label">密码</label>
                         <input v-model="password" type="password" class="form-control" id="password" placeholder="请输入密码">
                     </div>
-                    <div class="error_message">{{ error_message }}</div>
+                    <div class="error-message">{{ error_message }}</div>
                     <button type="submit" class="btn btn-success">提交</button>
                 </form>
             </div>
@@ -20,10 +20,10 @@
 </template>
 
 <script>
-import ContentField from "../../../components/ContentField.vue"
-import {useStore} from "vuex"
-import {ref} from "vue"
-import router from "@/router";
+import ContentField from '../../../components/ContentField.vue'
+import { useStore } from 'vuex'
+import { ref } from 'vue'
+import router from '../../../router/index'
 
 export default {
     components: {
@@ -31,47 +31,44 @@ export default {
     },
     setup() {
         const store = useStore();
-        let username = ref("");
-        let password = ref("");
-        let error_message = ref("");
-
+        let username = ref('');
+        let password = ref('');
+        let error_message = ref('');
 
         const jwt_token = localStorage.getItem("jwt_token");
-        if (jwt_token != null) {
+        if (jwt_token) {
             store.commit("updateToken", jwt_token);
             store.dispatch("getinfo", {
                 success() {
-                    router.push({name: "home"})
-                    store.commit("updateIsPullingInfo", false)
+                    router.push({ name: "home" });
+                    store.commit("updatePullingInfo", false);
                 },
                 error() {
-                    store.commit("updateIsPullingInfo", false)
+                    store.commit("updatePullingInfo", false);
                 }
             })
         } else {
-            store.commit("updateIsPullingInfo", false)
+            store.commit("updatePullingInfo", false);
         }
 
         const login = () => {
-            error_message.value = "",
+            error_message.value = "";
             store.dispatch("login", {
                 username: username.value,
                 password: password.value,
                 success() {
                     store.dispatch("getinfo", {
                         success() {
-                            router.push({name: "home"});
-                            console.log(store.state.user);
+                            router.push({ name: 'home' });
                         }
                     })
-
-                },      
+                },
                 error() {
                     error_message.value = "用户名或密码错误";
                 }
             })
-        };
-        
+        }
+
         return {
             username,
             password,
@@ -80,16 +77,13 @@ export default {
         }
     }
 }
-
-
 </script>
 
 <style scoped>
 button {
     width: 100%;
 }
-div.error_message {
+div.error-message {
     color: red;
 }
-
 </style>

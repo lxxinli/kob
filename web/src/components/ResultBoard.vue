@@ -3,31 +3,33 @@
         <div class="result-board-text" v-if="$store.state.pk.loser === 'all'">
             Draw
         </div>
-        <div class="result-board-text" v-else-if="$store.state.pk.loser === 'A' && $store.state.pk.a_id == $store.state.user.id">
+        <div class="result-board-text" v-else-if="$store.state.pk.loser === 'A' && $store.state.pk.a_id === parseInt($store.state.user.id)">
             Lose
         </div>
-        <div class="result-board-text" v-else-if="$store.state.pk.loser === 'B' && $store.state.pk.b_id == $store.state.user.id">
+        <div class="result-board-text" v-else-if="$store.state.pk.loser === 'B' && $store.state.pk.b_id === parseInt($store.state.user.id)">
             Lose
         </div>
         <div class="result-board-text" v-else>
             Win
         </div>
         <div class="result-board-btn">
-            <button @click="restart" type="button" class="btn btn-warning btn-lg"> 
+            <button @click="restart" type="button" class="btn btn-warning btn-lg">
                 再来!
             </button>
         </div>
-    </div>
+    </div>    
 </template>
 
 <script>
 import { useStore } from 'vuex';
+
 export default {
     setup() {
         const store = useStore();
+
         const restart = () => {
             store.commit("updateStatus", "matching");
-            store.commit("updateLoser", "none")
+            store.commit("updateLoser", "none");
             store.commit("updateOpponent", {
                 username: "匹配对手",
                 photo: "https://cdn.acwing.com/media/article/image/2022/08/09/1_1db2488f17-anonymous.png",
@@ -35,11 +37,10 @@ export default {
         }
 
         return {
-            restart,
-        }
+            restart
+        };
     }
 }
-
 </script>
 
 <style scoped>
@@ -57,10 +58,11 @@ div.result-board-text {
     font-size: 50px;
     font-weight: 600;
     font-style: italic;
-    padding-top: 6vh;
+    padding-top: 5vh;
 }
+
 div.result-board-btn {
-    padding-top: 6vh;
-    text-align: center; 
+    padding-top: 7vh;
+    text-align: center;
 }
 </style>

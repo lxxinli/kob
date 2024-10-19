@@ -1,9 +1,8 @@
 <template>
-    <div ref="parent" class="gameMap">
+    <div ref="parent" class="gamemap">
         <canvas ref="canvas" tabindex="0"></canvas>
     </div>
 </template>
-
 
 <script>
 import { GameMap } from "@/assets/scripts/GameMap";
@@ -19,19 +18,20 @@ export default {
         onMounted(() => {
             store.commit(
                 "updateGameObject",
-                 new GameMap(canvas.value.getContext('2d'), parent.value, store));
+                new GameMap(canvas.value.getContext('2d'), parent.value, store)
+            );
         });
 
         return {
             parent,
-            canvas,
+            canvas
         }
     }
 }
 </script>
 
 <style scoped>
-div.gameMap {
+div.gamemap {
     width: 100%;
     height: 100%;
     display: flex;
