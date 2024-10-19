@@ -33,7 +33,7 @@ export class GameMap extends GameObject {
 
         for (let r = 0;  r < this.rows; r++) {
             for (let c = 0; c < this.cols; c++) {
-                if (g[r][c] === 1) 
+                if (g[r][c]) 
                     this.walls.push(new Wall(r, c, this));
             }
         }

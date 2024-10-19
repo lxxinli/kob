@@ -2,9 +2,12 @@ package com.kob.backend.consumer.utils;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.kob.backend.consumer.WebSocketServer;
+import com.kob.backend.pojo.Bot;
 import com.kob.backend.pojo.Record;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,14 +28,29 @@ public class Game extends Thread{
     private ReentrantLock lock = new ReentrantLock();
     private String status = "playing"; // two status: playing -> finished
     private String loser = ""; // all: 平局; A: lose; B: lose
+    private final static String addBotUrl = "http://127.0.0.1:3002/bot/add/";
 
-    public Game(Integer rows, Integer cols, Integer inner_walls_count, Integer idA, Integer idB) {
+    public Game(Integer rows, Integer cols, Integer inner_walls_count, Integer idA, Bot botA, Integer idB, Bot botB) {
         this.rows = rows;
         this.cols = cols;
         this.inner_walls_count = inner_walls_count;
         this.g = new int[rows][cols];
-        playerA = new Player(idA, rows - 2, 1, new ArrayList<>());
-        playerB = new Player(idB, 1, cols - 2, new ArrayList<>());
+
+        Integer botIdA = -1;
+        Integer botIdB = -1;
+        String botCodeA = "";
+        String botCodeB = "";
+
+        if (botA != null) {
+            botIdA = botA.getId();
+            botCodeA = botA.getContent();
+        }
+        if (botB != null) {
+            botIdB = botB.getId();
+            botCodeB = botB.getContent();
+        }
+        playerA = new Player(idA, botIdA, botCodeA, rows - 2, 1, new ArrayList<>());
+        playerB = new Player(idB, botIdB, botCodeB, 1, cols - 2, new ArrayList<>());
     }
 
     private boolean check_connective(int sx, int sy, int tx, int ty) {
@@ -106,12 +124,47 @@ public class Game extends Thread{
         }
     }
 
+    private String getInput(Player player) {  // 将当前的局面信息编码成字符串
+        // 编码方式：[地图]#[我.sx]#[我.sy]#[我的操作]#[对手.sx]#[对手.sy]#[对手的操作]
+        Player me, you;
+        if (playerA.getId().equals(player.getId())) {
+            me = playerA;
+            you = playerB;
+        } else {
+            me = playerB;
+            you = playerA;
+        }
+
+        return getMapString() + "#" +
+                me.getSx() + "#" +
+                me.getSy() + "#(" +
+                me.getStepsString() + ")#" +
+                you.getSx() + "#" +
+                you.getSy() + "#(" +
+                you.getStepsString() + ")";
+
+    }
+
+    private void sendBotCode(Player player) {
+        if (player.getBotId().equals(-1)) return;   // 亲自出马，不需要执行代码
+
+        MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
+        data.add("user_id", player.getId().toString());
+        data.add("bot_code", player.getBotCode());
+        data.add("input", getInput(player));
+        WebSocketServer.restTemplate.postForObject(addBotUrl, data, String.class);
+    }
+
     private boolean nextStep() { //等待玩家的下一步操作
         try {
             Thread.sleep(200);             // 因为设定的前端蛇每秒只能动5个格子，所以最多一秒允许5次操作
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        sendBotCode(playerA);
+        sendBotCode(playerB);
+
         for (int i = 0; i < 50; i++) {
             try {
                 Thread.sleep(100);
@@ -158,8 +211,10 @@ public class Game extends Thread{
             status = "finished";
             if (!validA && !validB) {
                 loser = "all";
-            } else if (!validA) loser = "A";
-            else loser = "B";
+            } else if (!validA)
+                loser = "A";
+            else
+                loser = "B";
         }
     }
 
@@ -240,7 +295,8 @@ public class Game extends Thread{
                         loser = "all";
                     } else if (nextStepA == null) {
                         loser = "A";
-                    } else loser = "B";
+                    } else
+                        loser = "B";
                 } finally {
                     lock.unlock();
                 }

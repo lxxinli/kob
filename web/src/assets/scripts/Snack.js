@@ -3,12 +3,12 @@ import { Cell } from "./Cell";
 
 
 export class Snake extends GameObject {
-    constructor(info, gamemap) {
+    constructor(info, gameMap) {
         super();
 
         this.id = info.id;
         this.color = info.color;
-        this.gamemap = gamemap;
+        this.gameMap = gameMap;
 
         this.cells = [new Cell(info.r, info.c)];
         this.next_cell = null; // 下一步的目标位置
@@ -25,7 +25,7 @@ export class Snake extends GameObject {
         this.eps = 1e-2; // 允许的误差
 
         this.eye_direction = 0;
-        if (this.id === 1) this.eye_direction = 2;  //左下角的蛇初试向上，右上角的蛇朝下
+        if (this.id) this.eye_direction = 2;  //左下角的蛇初试向上，右上角的蛇朝下
 
         this.eye_dx = [ // 蛇眼睛不同方向的偏移量
             [-1, 1],
@@ -119,8 +119,8 @@ export class Snake extends GameObject {
     }
 
     render() {
-        const L = this.gamemap.L;
-        const ctx = this.gamemap.ctx;
+        const L = this.gameMap.L;
+        const ctx = this.gameMap.ctx;
 
         ctx.fillStyle = this.color;
 

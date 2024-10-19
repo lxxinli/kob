@@ -43,8 +43,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 配置无状态会话
                 .authorizeHttpRequests(auth -> auth // 配置授权请求
                         .requestMatchers("/user/account/token/", "/user/account/register/").permitAll() // 允许特定路径无条件访问
-                        .requestMatchers("/pk/start/game/").access((authentication, context) ->
-                                new AuthorizationDecision(hasIpAddress.matches(context.getRequest()))) // 使用 SpEL 表达式限制 IP 地址
+                        .requestMatchers("/pk/start/game/", "/pk/receive/bot/move/").access((authentication, context) ->
+                                new AuthorizationDecision(hasIpAddress.matches(context.getRequest()))) // 限制 IP 地址: 只允许127.0.0.1访问
                         .requestMatchers(HttpMethod.OPTIONS).permitAll() // 允许所有 OPTIONS 请求
                         .anyRequest().authenticated()); // 其他请求需要身份验证
 
