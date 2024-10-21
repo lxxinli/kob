@@ -52,7 +52,7 @@ export default {
                     if (resp.response_message === "success") {
                         router.push({name: "user_account_login"});
                     } else {
-                        error_message.value = resp.error_message;
+                        error_message.value = resp.response_message;
                     }
                 },
             });

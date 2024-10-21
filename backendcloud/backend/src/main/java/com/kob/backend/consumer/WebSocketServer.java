@@ -36,7 +36,7 @@ public class WebSocketServer {
     public Game game = null;
 
     //  这里的webSocketServer并不是之前写的标准的spring一个组件，所以这里无法使用@Autowired
-    private static UserMapper userMapper;        // static是为了单例模式，独一份
+    public static UserMapper userMapper;        // static是为了单例模式，独一份
     public static RecordMapper recordMapper;
     private static BotMapper botMapper;
     public static RestTemplate restTemplate;
