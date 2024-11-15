@@ -74,7 +74,6 @@ public class MatchingPool extends Thread {
     }
 
     private void matchPlayers() { // 尝试匹配所有玩家
-        System.out.println("match Players: " + players.toString());
         lock.lock();
         try {
             boolean[] used = new boolean[players.size()];

@@ -2,7 +2,9 @@
     <PlayGround v-if="$store.state.pk.status === 'playing'" />
     <MatchGround v-if="$store.state.pk.status === 'matching'" />
     <ResultBoard v-if="$store.state.pk.loser != 'none'" />
-</template>
+    <div class="user-color" v-if="$store.state.pk.status === 'playing' && $store.state.user.id == $store.state.pk.a_id">左下方</div>
+    <div class="user-color" v-if="$store.state.pk.status === 'playing' && $store.state.user.id == $store.state.pk.b_id">右上方</div>
+</template>'
 
 <script>
 import PlayGround from '../../components/PlayGround.vue'
@@ -19,7 +21,7 @@ export default {
     },
     setup() {
         const store = useStore();
-        const socketUrl = `ws://127.0.0.1:3000/websocket/${store.state.user.token}/`;
+        const socketUrl = `ws://47.116.187.43/websocket/${store.state.user.token}/`;
 
         store.commit("updateLoser", "none");
         store.commit("updateIsRecord", false);
@@ -83,4 +85,10 @@ export default {
 </script>
 
 <style scoped>
+div.user-color {
+    text-align: center;
+    color: white;
+    font-size: 30px;
+    font-weight: 600;
+}
 </style>
